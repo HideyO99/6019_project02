@@ -6,6 +6,8 @@
 *.lo
 *.o
 *.obj
+x64/
+x86/
 
 # Precompiled Headers
 *.gch
@@ -14,7 +16,7 @@
 # Compiled Dynamic libraries
 *.so
 *.dylib
-*.dll
+#*.dll
 
 # Fortran module files
 *.mod
@@ -24,9 +26,12 @@
 *.lai
 *.la
 *.a
-*.lib
+#*.lib
 
 # Executables
 *.exe
 *.out
 *.app
+
+# Visual Studio 2015/2017 cache/options directory
+.vs/
