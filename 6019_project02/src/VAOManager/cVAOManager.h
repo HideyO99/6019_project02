@@ -34,6 +34,7 @@ public:
 	bool setInstanceObjPosition(std::string meshObjName, glm::vec4 value);
 
 	cMeshObj* findMeshObjAddr(std::string meshObjName);
+	cModelDrawInfo* findDrawInfoAddr(std::string meshObjName);
 	std::map<std::string, cMeshObj*> mapInstanceNametoMeshObj;
 	std::vector<cMeshObj*> pVecInstanceMeshObj;
 	glm::vec3 cameraEyeFromXML;

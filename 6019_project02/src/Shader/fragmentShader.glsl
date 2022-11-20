@@ -42,7 +42,7 @@ void main()
 	vec4 finalObjectColour = vec4( 0.0f, 0.0f, 0.0f, 1.0f );
 	
     vec3 materialColor = fColor.rgb;
-    materialColor = RGBA_Color.rgb;
+    //materialColor = RGBA_Color.rgb;
     
     //vec3 ambient = 0.6 * materialColor;
     if ( bDoNotLight )

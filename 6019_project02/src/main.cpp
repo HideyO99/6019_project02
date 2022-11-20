@@ -21,6 +21,9 @@
 #include "Light/cLightManager.h"
 #include "GUI/cGUI.h"
 #include "time.h"
+#include "Physic/cObject.h"
+#include "Physic/cPhysicSystem.h"
+
 
 #define MODEL_LIST_XML          "asset/model.xml"
 #define VERTEX_SHADER_FILE      "src/shader/vertexShader.glsl"
@@ -41,11 +44,13 @@ float fov = 45.0f;
 cLightManager* g_pTheLightManager = NULL;
 static GLFWwindow* window = nullptr;
 
+cPhysicSystem g_physicSys;
+
 double g_LastCall;
 double g_CurrentTime;
 
-const int MILLISECONDS_IN_A_SECOND = 1000;
-const int FRAMES_PER_SECOND = 60;
+//const int MILLISECONDS_IN_A_SECOND = 1000;
+const int FRAMES_PER_SECOND = 30;
 const double FRAME_RATE = (double)1 / FRAMES_PER_SECOND;
 
 
@@ -85,7 +90,7 @@ int main(void)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 
-    window = glfwCreateWindow(1280, 800, "6028 Graphic Project1", NULL, NULL);
+    window = glfwCreateWindow(1280, 800, "6019 Physic Project2", NULL, NULL);
     if (!window)
     {
         glfwTerminate();
@@ -173,11 +178,11 @@ int main(void)
     //result = pVAOManager->setInstanceObjVisible("terrain01", true);
     result = pVAOManager->setInstanceObjRGB("terrain01", glm::vec4(1.f,1.f,1.f,1.f));
     result = pVAOManager->setInstanceObjSpecularPower("terrain01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
-    result = pVAOManager->setInstanceObjScale("terrain01", glm::vec3(20,20,20));
+    //result = pVAOManager->setInstanceObjScale("terrain01", glm::vec3(20,20,20));
 
-    result = pVAOManager->setInstanceObjRGB("truck01", glm::vec4(0.65f, 0.45f, 0.f, 1.f));
-    result = pVAOManager->setInstanceObjSpecularPower("truck01", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
-    result = pVAOManager->setInstanceObjScale("truck01", glm::vec3(0.7f,0.7f,0.7f));
+    result = pVAOManager->setInstanceObjRGB("P51", glm::vec4(0.65f, 0.45f, 0.f, 1.f));
+    result = pVAOManager->setInstanceObjSpecularPower("P51", glm::vec4(1.0f, 1.0f, 1.0f, 1000.0f));
+    //result = pVAOManager->setInstanceObjScale("P51", glm::vec3(0.7f,0.7f,0.7f));
 
     result = pVAOManager->setInstanceObjWireframe("box1", true);
 
@@ -192,7 +197,16 @@ int main(void)
     light3Setup();
     light4Setup();
 
-
+    //create physic object
+    cModelDrawInfo drawingInformation;
+    result = pVAOManager->FindDrawInfo((pVAOManager->findMeshObjAddr("terrain01"))->meshName.c_str(), drawingInformation);
+    g_physicSys.createEnvironment(drawingInformation);
+    g_physicSys.boundingBox.pMeshObj = pVAOManager->findMeshObjAddr("box1");
+    g_physicSys.boundingBox.pDrawInfo = pVAOManager->findDrawInfoAddr("box1");
+    g_physicSys.createObject(pVAOManager->findMeshObjAddr("P51"),pVAOManager->findDrawInfoAddr("P51"));
+   
+    //g_CurrentTime = std::chrono::steady_clock::now();
+    cTime::update();
 
     while (!glfwWindowShouldClose(window))
     {
@@ -210,7 +224,7 @@ int main(void)
         glViewport(0, 0, width, height);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-       
+        updateByFrameRate();
 
         //glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
         glm::vec3 cameraDirection = glm::normalize(g_cameraEye - g_cameraTarget);
@@ -489,27 +503,44 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     const float CAMERA_MOVE_SPEED = 1.f;
     if (key == GLFW_KEY_A)
     {
-        ::g_cameraEye.x -= CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(-1, 0, 0));
+        }
+        
+        //::g_cameraEye.x -= CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_D)
     {
-        ::g_cameraEye.x += CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(1, 0, 0));
+        }
+        //::g_cameraEye.x += CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_W)
     {
-        ::g_cameraEye.z -= CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, 0, -1));
+        }
+       //::g_cameraEye.z -= CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_S)
     {
-        ::g_cameraEye.z += CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, 0, 1));
+        }
+        //::g_cameraEye.z += CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_Q)
     {
-        ::g_cameraEye.y -= CAMERA_MOVE_SPEED;
+        //::g_cameraEye.y -= CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_E)
     {
-        ::g_cameraEye.y += CAMERA_MOVE_SPEED;
+        //::g_cameraEye.y += CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
     {
@@ -586,12 +617,12 @@ void updateByFrameRate()
         double elapsedTime = g_CurrentTime - g_LastCall;
         g_LastCall = g_CurrentTime;
 
-        while (elapsedTime > 0.1)
-        {
-            //update(elapsedTime)
-            elapsedTime -= 0.1;
-        }
-        //update(elapsedTime)
+        //while (elapsedTime > 0.1)
+        //{
+        //    //update(elapsedTime)
+        //    elapsedTime -= 0.1;
+        //}
+        g_physicSys.updateSystem(elapsedTime);
     }
 }
 

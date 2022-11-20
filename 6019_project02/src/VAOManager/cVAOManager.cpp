@@ -340,3 +340,18 @@ cMeshObj* cVAOManager::findMeshObjAddr(std::string meshObjName)
 	}
 	return itCurrentMesh->second;
 }
+
+cModelDrawInfo* cVAOManager::findDrawInfoAddr(std::string meshObjName)
+{
+	cMeshObj* meshObj = findMeshObjAddr(meshObjName);
+
+	std::map<std::string, cModelDrawInfo>::iterator i_DrawInfo = mapModelNametoVAOID.find(meshObj->meshName);
+
+	if (i_DrawInfo == mapModelNametoVAOID.end())
+	{
+		return nullptr;
+	}
+
+	return &(i_DrawInfo->second);
+
+}

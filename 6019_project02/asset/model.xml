@@ -1,6 +1,6 @@
 <?xml version = "1.0" encoding="UTF-8"?>
 <PLYMODEL>
-	<model name="terrain">asset/model/terrain.ply
+	<model name="terrain">asset/model/valley_terrain.ply
 		<modelInstance>terrain01
 			<posX>0</posX>
 			<posY>0</posY>
@@ -10,11 +10,11 @@
 			<rotateZ>0</rotateZ>
 		</modelInstance>
 	</model>
-	<model name="truck1">asset/model/truck.ply
-		<modelInstance>truck01
-			<posX>0</posX>
-			<posY>0</posY>
-			<posZ>0</posZ>
+	<model name="airplane">asset/model/p51_mustang.ply
+		<modelInstance>P51
+			<posX>-250</posX>
+			<posY>30</posY>
+			<posZ>250</posZ>
 			<rotateX>0</rotateX>
 			<rotateY>0</rotateY>
 			<rotateZ>0</rotateZ>

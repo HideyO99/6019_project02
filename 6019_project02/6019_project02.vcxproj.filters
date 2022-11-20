@@ -99,8 +99,17 @@
     <ClInclude Include="src\Physic\cObject.h">
       <Filter>Physic</Filter>
     </ClInclude>
+    <ClInclude Include="src\Physic\cPhysicSystem.h">
+      <Filter>Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physic\cTriangle.h">
+      <Filter>Physic</Filter>
+    </ClInclude>
     <ClInclude Include="src\Physic\cBoundingBox.h">
-      <Filter>Header Files</Filter>
+      <Filter>Physic</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Physic\math.h">
+      <Filter>Physic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -167,8 +176,17 @@
     <ClCompile Include="src\Physic\cObject.cpp">
       <Filter>Physic</Filter>
     </ClCompile>
+    <ClCompile Include="src\Physic\cPhysicSystem.cpp">
+      <Filter>Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physic\cTriangle.cpp">
+      <Filter>Physic</Filter>
+    </ClCompile>
     <ClCompile Include="src\Physic\cBoundingBox.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Physic</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Physic\math.cpp">
+      <Filter>Physic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
