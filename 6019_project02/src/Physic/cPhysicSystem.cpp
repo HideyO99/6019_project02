@@ -166,6 +166,7 @@ void cPhysicSystem::createObject(cMeshObj* meshObj,cModelDrawInfo* DrawInfo)
 
 void cPhysicSystem::updateSystem(float dt)
 {
+    bool collision;
     size_t numObj = vec_Objects.size();
     if (numObj == 0) 
     {
@@ -174,7 +175,7 @@ void cPhysicSystem::updateSystem(float dt)
 
     for (size_t i = 0; i < numObj; i++)
     {
-        //vec_Objects[i]->applyForce(glm::vec3(0, -0.0981f, 0));
+        vec_Objects[i]->applyForce(glm::vec3(0, -0.0981f, 0));
         vec_Objects[i]->integrate(dt);
     }
 
@@ -191,15 +192,20 @@ void cPhysicSystem::updateSystem(float dt)
         {
             for (size_t j = 0; j < mapEnvironmentAABBStructure[hash].size(); j++)
             {
-                collisionCheck(vec_Objects[i]->pBBox , mapEnvironmentAABBStructure[hash].at(j));
+                collision = collisionCheck(vec_Objects[i], mapEnvironmentAABBStructure[hash].at(j));
+                if (collision)
+                {
+                    vec_Objects[i]->position.y = vec_Objects[i]->prevPosition.y;
+                    vec_Objects[i]->velocity.y = 0;
+                }
             }
         }
     }
 }
 
-bool cPhysicSystem::collisionCheck(cBoundingBox* aabb, cTriangle* t)
+bool cPhysicSystem::collisionCheck(cObject* pObj, cTriangle* t)
 {
-    int result = TestTriangleAABB(t->pointA, t->pointB, t->pointC, *aabb);
+    int result = TestTriangleAABB(t->pointA, t->pointB, t->pointC, *pObj->pBBox);
     if (result == 0)
     {
         return false;

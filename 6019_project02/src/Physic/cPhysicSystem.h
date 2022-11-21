@@ -17,7 +17,7 @@ public:
 	void createObject(cMeshObj* meshObj, cModelDrawInfo* DrawInfo);
 	void updateSystem(float dt);
 
-	bool collisionCheck(cBoundingBox* aabb, cTriangle* t);
+	bool collisionCheck(cObject* pObj, cTriangle* t);
 
 	cBoundingBox boundingBox;
 	cModelDrawInfo* pDrawInfo;
