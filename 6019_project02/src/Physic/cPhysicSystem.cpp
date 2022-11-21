@@ -13,9 +13,9 @@ int CalculateHashValue(const glm::vec3& vec)
 {
     int hashValue = 0;
 
-    hashValue += floor(vec.x + 250) / 100 * 10000;
-    hashValue += floor(vec.y) / 100 * 100;
-    hashValue += floor(vec.z + 250) / 100;
+    hashValue += ((int)(floor(vec.x + 250) / 10)) * 100000;
+    hashValue += ((int)(floor(vec.y) / 10)) *1000;
+    hashValue += ((int)(floor(vec.z + 250) / 10)) ;
     return hashValue;
 }
 
@@ -98,11 +98,12 @@ void cPhysicSystem::createEnvironment(cModelDrawInfo drawInfo)
     std::vector<glm::vec3> vertices;
     std::vector<int> triangles;
 
-    for (size_t i = 0; i < drawInfo.numberOfTriangles; i+=3)
+    for (size_t i = 0; i < drawInfo.numberOfIndices; i+=3)
     {
         glm::vec3 pA = glm::vec3(drawInfo.pVertices[drawInfo.pIndices[i]].x, drawInfo.pVertices[drawInfo.pIndices[i]].y, drawInfo.pVertices[drawInfo.pIndices[i]].z);
         glm::vec3 pB = glm::vec3(drawInfo.pVertices[drawInfo.pIndices[i+1]].x, drawInfo.pVertices[drawInfo.pIndices[i+1]].y, drawInfo.pVertices[drawInfo.pIndices[i+1]].z);
         glm::vec3 pC = glm::vec3(drawInfo.pVertices[drawInfo.pIndices[i+2]].x, drawInfo.pVertices[drawInfo.pIndices[i+2]].y, drawInfo.pVertices[drawInfo.pIndices[i+2]].z);
+
 
         int hashA = CalculateHashValue(pA);
         int hashB = CalculateHashValue(pB);
@@ -129,6 +130,7 @@ void cPhysicSystem::createObject(cMeshObj* meshObj,cModelDrawInfo* DrawInfo)
     pDrawInfo = DrawInfo;
     plane->setMass(1.f);
     plane->pBBox = &boundingBox;
+    plane->position = glm::vec3(-50, 50, 70);
     boundingBox.halfExtentOffset = glm::vec3((pDrawInfo->extentX / 2.f), (pDrawInfo->extentY / 2.f), (pDrawInfo->extentZ / 2.f));
     boundingBox.centerPointOffset = glm::vec3(boundingBox.halfExtentOffset.x + pDrawInfo->minX, boundingBox.halfExtentOffset.y + pDrawInfo->minY, boundingBox.halfExtentOffset.z + pDrawInfo->minZ);
     boundingBox.maxPointOffset = glm::vec3(pDrawInfo->maxX, pDrawInfo->maxY, pDrawInfo->maxZ);

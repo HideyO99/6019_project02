@@ -59,7 +59,7 @@ void cObject::update()
 	{
 		this->position.z = 250;
 	}
-
+	this->position.y = 30;
 	pMeshObj->position = this->position;
 	this->pBBox->pMeshObj->position = this->position+ this->pBBox->centerPointOffset;
 	this->pBBox->centerPoint = this->position + this->pBBox->centerPointOffset;

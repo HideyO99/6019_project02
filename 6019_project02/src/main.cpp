@@ -227,6 +227,8 @@ int main(void)
         updateByFrameRate();
 
         //glm::vec3 upVector = glm::vec3(0.0f, 1.0f, 0.0f);
+        g_cameraTarget = g_physicSys.vec_Objects[0]->position;
+        g_cameraEye = g_physicSys.vec_Objects[0]->position + glm::vec3(0, 10, 50);
         glm::vec3 cameraDirection = glm::normalize(g_cameraEye - g_cameraTarget);
         glm::vec3 cameraRight = glm::normalize(glm::cross(g_upVector, cameraDirection));
         if (!bIsWalkAround)
@@ -508,7 +510,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
             g_physicSys.vec_Objects[i]->applyForce(glm::vec3(-1, 0, 0));
         }
         
-        //::g_cameraEye.x -= CAMERA_MOVE_SPEED;
     }
     if (key == GLFW_KEY_D)
     {
@@ -516,7 +517,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             g_physicSys.vec_Objects[i]->applyForce(glm::vec3(1, 0, 0));
         }
-        //::g_cameraEye.x += CAMERA_MOVE_SPEED;
+
     }
     if (key == GLFW_KEY_W)
     {
@@ -524,7 +525,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, 0, -1));
         }
-       //::g_cameraEye.z -= CAMERA_MOVE_SPEED;
+
     }
     if (key == GLFW_KEY_S)
     {
@@ -532,21 +533,32 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         {
             g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, 0, 1));
         }
-        //::g_cameraEye.z += CAMERA_MOVE_SPEED;
+
     }
     if (key == GLFW_KEY_Q)
     {
-        //::g_cameraEye.y -= CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, 1, 0));
+        }
     }
     if (key == GLFW_KEY_E)
     {
-        //::g_cameraEye.y += CAMERA_MOVE_SPEED;
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->applyForce(glm::vec3(0, -1, 0));
+        }
+    }
+    if (key == GLFW_KEY_R) //to break object
+    {
+        for (size_t i = 0; i < g_physicSys.vec_Objects.size(); i++)
+        {
+            g_physicSys.vec_Objects[i]->velocity = glm::vec3(0);
+        }
     }
     if (key == GLFW_KEY_SPACE && action == GLFW_RELEASE)
     {
-        //::g_cameraEye = glm::vec3(-5.5f, -3.4f, 15.0f);
-        //::g_cameraEye = glm::vec3(0.0, 100.0, 300.0f);
-        //::g_cameraTarget = glm::vec3(5.0f, 0.0f, 0.0f);
+
         bIsWalkAround = !bIsWalkAround;
 
     }
@@ -617,11 +629,6 @@ void updateByFrameRate()
         double elapsedTime = g_CurrentTime - g_LastCall;
         g_LastCall = g_CurrentTime;
 
-        //while (elapsedTime > 0.1)
-        //{
-        //    //update(elapsedTime)
-        //    elapsedTime -= 0.1;
-        //}
         g_physicSys.updateSystem(elapsedTime);
     }
 }
